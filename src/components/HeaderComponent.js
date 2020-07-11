@@ -1,8 +1,32 @@
 import React, { Component, Fragment } from 'react';
+import { Navbar, NavbarBrand, Jumbotron } from 'reactstrap';
 
-export class Header extends Component {
+class Header extends Component {
   render() {
-    return <Fragment></Fragment>;
+    return (
+      <Fragment>
+        <Navbar dark>
+          <div className='container'>
+            <NavbarBrand href='/'>Ristorante Con Fusion</NavbarBrand>
+          </div>
+        </Navbar>
+
+        <Jumbotron>
+          <div className='container'>
+            <div className='row row-header'>
+              <div className='col-12 sol-sm-6'>
+                <h1>Ristorante Con Fusion</h1>
+                <p>
+                  We take inspiration from the World's best cuisines, and create
+                  an unique fusion ecperience. Our lipsmacking creations will
+                  tickle your culinary sense!
+                </p>
+              </div>
+            </div>
+          </div>
+        </Jumbotron>
+      </Fragment>
+    );
   }
 }
 
