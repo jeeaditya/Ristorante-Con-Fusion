@@ -51,7 +51,7 @@ function Contact(props) {
               <i className='fa fa-phone'></i> Call
             </a>
             <a role='button' className='btn btn-info'>
-              <i className='fa fa-skype'></i> Skype
+              <i className='fa fa-youtube'></i> You Tube
             </a>
             <a
               role='button'
