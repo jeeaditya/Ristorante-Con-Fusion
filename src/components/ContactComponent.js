@@ -8,6 +8,7 @@ import {
   Label,
   Input,
   Col,
+  FormFeedback,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
@@ -23,10 +24,17 @@ class Contact extends React.Component {
       agree: false,
       contactType: 'Tel.',
       message: '',
+      touched: {
+        firstname: false,
+        lastname: false,
+        telnum: false,
+        email: false,
+      },
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
   }
 
   handleInputChange(event) {
@@ -38,6 +46,43 @@ class Contact extends React.Component {
     this.setState({ [name]: value });
   }
 
+  handleBlur = (field) => (evt) => {
+    this.setState({
+      touched: { ...this.state.touched, [field]: true },
+    });
+  };
+
+  validate(firstname, lastname, telnum, email) {
+    const errors = {
+      firstname: '',
+      lastname: '',
+      telnum: '',
+      email: '',
+    };
+    // First Name Validate
+    if (this.state.touched.firstname && firstname.length < 3)
+      errors.firstname = 'First Name should be atleast 3 characters';
+    else if (this.state.touched.firstname && firstname.length > 15)
+      errors.firstname = 'First Name should be less than 16 characters';
+    // Last Name Validate
+    if (this.state.touched.lastname && lastname.length < 3)
+      errors.lastname = 'Last Name should be atleast 3 characters';
+    else if (this.state.touched.lastname && lastname.length > 15)
+      errors.lastname = 'Last Name should be less than 16 characters';
+    // Telephone Number Validate
+    const reg = /^\d+$/;
+    if (this.state.touched.telnum && (!reg.test(telnum) || telnum.length != 10))
+      errors.telnum = 'Please Input Valid Telephone Number';
+    // Email Validate
+    if (
+      this.state.touched.email &&
+      email.split('').filter((x) => x === '@').length !== 1
+    )
+      errors.email = 'Please Input Valid Email Address';
+
+    return errors;
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     console.log('Current State Is: ' + JSON.stringify(this.state));
@@ -45,6 +90,18 @@ class Contact extends React.Component {
   }
 
   render() {
+    const {
+      firstname,
+      lastname,
+      telnum,
+      email,
+      agree,
+      contactType,
+      message,
+    } = this.state;
+
+    const errors = this.validate(firstname, lastname, telnum, email);
+
     return (
       <div className='container'>
         <div className='row'>
@@ -122,9 +179,13 @@ class Contact extends React.Component {
                     name='firstname'
                     placeholder='First Name'
                     autoComplete='off'
-                    value={this.state.firstname}
+                    value={firstname}
+                    valid={errors.firstname === ''}
+                    invalid={errors.firstname !== ''}
                     onChange={this.handleInputChange}
+                    onBlur={this.handleBlur('firstname')}
                   />
+                  <FormFeedback>{errors.firstname}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -138,9 +199,13 @@ class Contact extends React.Component {
                     name='lastname'
                     placeholder='Last Name'
                     autoComplete='off'
-                    value={this.state.lastname}
+                    value={lastname}
+                    valid={errors.lastname === ''}
+                    invalid={errors.lastname !== ''}
                     onChange={this.handleInputChange}
+                    onBlur={this.handleBlur('lastname')}
                   />
+                  <FormFeedback>{errors.lastname}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -154,9 +219,13 @@ class Contact extends React.Component {
                     name='telnum'
                     placeholder='Telephone No.'
                     autoComplete='off'
-                    value={this.state.telnum}
+                    value={telnum}
+                    valid={errors.telnum === ''}
+                    invalid={errors.telnum !== ''}
                     onChange={this.handleInputChange}
+                    onBlur={this.handleBlur('telnum')}
                   />
+                  <FormFeedback>{errors.telnum}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -170,9 +239,13 @@ class Contact extends React.Component {
                     name='email'
                     placeholder='Email'
                     autoComplete='off'
-                    value={this.state.email}
+                    value={email}
+                    valid={errors.email === ''}
+                    invalid={errors.email !== ''}
                     onChange={this.handleInputChange}
+                    onBlur={this.handleBlur('email')}
                   />
+                  <FormFeedback>{errors.email}</FormFeedback>
                 </Col>
               </FormGroup>
               <FormGroup row>
@@ -182,7 +255,7 @@ class Contact extends React.Component {
                       <Input
                         type='checkbox'
                         name='agree'
-                        checked={this.state.agree}
+                        checked={agree}
                         onChange={this.handleInputChange}
                       />{' '}
                       By clicking this you <strong>agree</strong> that{' '}
@@ -194,7 +267,7 @@ class Contact extends React.Component {
                   <Input
                     type='select'
                     name='contactType'
-                    value={this.state.contactType}
+                    value={contactType}
                     onChange={this.handleInputChange}
                   >
                     <option>Phone</option>
@@ -213,7 +286,7 @@ class Contact extends React.Component {
                     name='message'
                     row='12'
                     autoComplete='off'
-                    value={this.state.message}
+                    value={message}
                     onChange={this.handleInputChange}
                   />
                 </Col>
