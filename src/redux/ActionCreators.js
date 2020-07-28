@@ -85,8 +85,8 @@ export const postFeedback = ({ firstname, lastname, telnum, email, agree, contac
       alert('Thank You For Feedback! \n' + JSON.stringify(response));
     })
     .catch((error) => {
-      console.log('Post Comments', error.message);
-      alert('Your Commnet Could Not Be Posted \nError:' + error.message);
+      console.log('Post Feedback', error.message);
+      alert('Your Feedback Could Not Be Posted \nError:' + error.message);
     });
 };
 
